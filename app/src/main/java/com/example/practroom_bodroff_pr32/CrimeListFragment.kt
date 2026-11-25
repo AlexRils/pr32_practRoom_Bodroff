@@ -1,14 +1,13 @@
+
 package com.example.practroom_bodroff_pr32
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import android.widget.Button
-import android.widget.EditText
 
 class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
 
@@ -23,29 +22,42 @@ class CrimeListFragment : Fragment(R.layout.fragment_crime_list) {
             R.id.crime_recycler_view
         )
 
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-        adapter = CrimeAdapter(emptyList())
+        adapter = CrimeAdapter(emptyList()) { crime ->
+
+            val fragment = CrimeFragment()
+
+            val bundle = Bundle()
+            bundle.putString("crime_id", crime.id.toString())
+
+            fragment.arguments = bundle
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
         recyclerView.adapter = adapter
 
-        val titleInput = view.findViewById<EditText>(R.id.crime_title_input)
-        val addButton = view.findViewById<Button>(R.id.add_crime_button)
+        val addButton = view.findViewById<Button>(
+            R.id.add_crime_button
+        )
 
         addButton.setOnClickListener {
-            val title = titleInput.text.toString()
 
-            if (title.isNotBlank()) {
-                val crime = Crime(title = title)
-                crimeListViewModel.addCrime(crime)
-                titleInput.text.clear()
-            }
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, CrimeFragment())
+                .addToBackStack(null)
+                .commit()
         }
 
         crimeListViewModel.crimeListLiveData.observe(
-            viewLifecycleOwner,
-            Observer { crimes ->
-                adapter?.updateCrimes(crimes)
-            }
-        )
+            viewLifecycleOwner
+        ) { crimes ->
+
+            adapter?.updateCrimes(crimes)
+        }
     }
 }

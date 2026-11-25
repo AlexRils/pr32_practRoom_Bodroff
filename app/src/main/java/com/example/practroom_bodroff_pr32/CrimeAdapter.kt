@@ -8,15 +8,21 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class CrimeAdapter(
-    private var crimes: List<Crime>
+    private var crimes: List<Crime>,
+    private val onCrimeClick: (Crime) -> Unit
 ) : RecyclerView.Adapter<CrimeAdapter.CrimeHolder>() {
 
     class CrimeHolder(view: View) : RecyclerView.ViewHolder(view) {
+
         val titleTextView: TextView =
             view.findViewById(R.id.crime_title)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): CrimeHolder {
+
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.list_item_crime, parent, false)
 
@@ -24,8 +30,14 @@ class CrimeAdapter(
     }
 
     override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
+
         val crime = crimes[position]
+
         holder.titleTextView.text = crime.title
+
+        holder.itemView.setOnClickListener {
+            onCrimeClick(crime)
+        }
     }
 
     override fun getItemCount(): Int {

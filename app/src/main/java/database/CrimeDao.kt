@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.practroom_bodroff_pr32.Crime
 import java.util.UUID
 
@@ -19,4 +20,7 @@ interface CrimeDao {
 
     @Insert
     suspend fun insertCrime(crime: Crime)
+
+    @Update
+    suspend fun updateCrime(crime: Crime)
 }

@@ -15,7 +15,9 @@ class CrimeRepository private constructor(context: Context) {
         context.applicationContext,
         CrimeDatabase::class.java,
         DATABASE_NAME
-    ).build()
+    )
+        .fallbackToDestructiveMigration()
+        .build()
 
     private val crimeDao = database.crimeDao()
 
@@ -25,9 +27,16 @@ class CrimeRepository private constructor(context: Context) {
         crimeDao.insertCrime(crime)
     }
 
-    fun getCrime(id: UUID): LiveData<Crime?> = crimeDao.getCrime(id)
+    suspend fun updateCrime(crime: Crime) {
+        crimeDao.updateCrime(crime)
+    }
+
+    fun getCrime(id: UUID): LiveData<Crime?> {
+        return crimeDao.getCrime(id)
+    }
 
     companion object {
+
         private var INSTANCE: CrimeRepository? = null
 
         fun initialize(context: Context) {

@@ -16,21 +16,13 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/crime_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_weight="1" />
-
-
-    <EditText
-        android:id="@+id/crime_title_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Название преступления" />
 
     <Button
         android:id="@+id/add_crime_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Добавить преступление" />
-
 
 </LinearLayout>
